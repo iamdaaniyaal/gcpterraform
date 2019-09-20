@@ -7,7 +7,7 @@ sudo yum install wget -y
 cd ~
 
 cd projectdir
-cd terraform-shell-script
+cd gcpterraform/scripts
 
 
 sudo wget https://storage.googleapis.com/harbor-releases/release-1.8.0/harbor-online-installer-v1.8.2.tgz
@@ -52,7 +52,7 @@ sudo sed -i 's/target/'$IP'/' daemon.json
 
 cd /
 cd ~
-cd projectdir/terraform-shell-script
+cd projectdir/gcpterraform/scripts
 
 cd harbor
 
