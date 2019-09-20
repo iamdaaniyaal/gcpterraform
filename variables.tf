@@ -113,3 +113,4 @@ variable "sql_database_name" {}
 
 // Devops starts here
 variable "elk_instance_name" {}
+variable "harbor_instance_name" {}
