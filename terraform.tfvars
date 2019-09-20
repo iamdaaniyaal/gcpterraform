@@ -83,3 +83,4 @@ sql_database_name = "wp-database"
 // Devops starts here
 
 elk_instance_name = "elk"
+harbor_instance_name = "harbor"
