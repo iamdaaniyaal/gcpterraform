@@ -548,7 +548,7 @@ resource "google_compute_instance" "wordpress" {
 
 
 
-  metadata_startup_script = "sudo  echo \"root:root123\" | chpasswd; sudo  mv /etc/ssh/sshd_config  /opt; sudo touch /etc/ssh/sshd_config; sudo echo -e \"Port 22\nHostKey /etc/ssh/ssh_host_rsa_key\nPermitRootLogin yes\nPubkeyAuthentication yes\nPasswordAuthentication yes\nUsePAM yes\" >  /etc/ssh/sshd_config; sudo systemctl restart sshd; sudo apt install git  -y; git clone https://github.com/iamdaaniyaal/GCP.git; cd GCP/Terraform; sudo chmod 777 script.sh; ./script.sh"
+  metadata_startup_script = "sudo  echo \"root:root123\" | chpasswd; sudo  mv /etc/ssh/sshd_config  /opt; sudo touch /etc/ssh/sshd_config; sudo echo -e \"Port 22\nHostKey /etc/ssh/ssh_host_rsa_key\nPermitRootLogin yes\nPubkeyAuthentication yes\nPasswordAuthentication yes\nUsePAM yes\" >  /etc/ssh/sshd_config; sudo systemctl restart sshd; sudo apt install git  -y; git clone https://github.com/iamdaaniyaal/gcpterraform.git; cd gcpterraform/scripts; sudo chmod 777 wordpress.sh; ./wordpress.sh"
 
 
 }
@@ -558,7 +558,7 @@ resource "google_compute_instance" "wordpress" {
 data "template_file" "phpconfig" {
   # template = "${file("conf.wp-config.php")}"
 
-  template = templatefile("conf.wp-conf.php", { db_host = "${google_sql_database_instance.sql.public_ip_address}", db_name = "${google_sql_database.database.name}", db_user = "${google_sql_user.users.name}", db_pass = "${google_sql_user.users.password}" })
+  template = templatefile("${path.module}/scripts/conf.wp-conf.php", { db_host = "${google_sql_database_instance.sql.public_ip_address}", db_name = "${google_sql_database.database.name}", db_user = "${google_sql_user.users.name}", db_pass = "${google_sql_user.users.password}" })
 
 }
 
@@ -567,7 +567,7 @@ data "template_file" "phpconfig" {
 data "template_file" "filebeat" {
   # template = "${file("conf.wp-config.php")}"
 
-  template = templatefile("filebeat.yml", { ip = "${google_compute_instance.elk.network_interface.0.network_ip}" })
+  template = templatefile("${path.module}/scripts/filebeat.yml", { ip = "${google_compute_instance.elk.network_interface.0.network_ip}" })
 
 }
 
