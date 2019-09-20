@@ -1,15 +1,13 @@
 # gcpterraform
 Automation on Google Cloud Platform (GCP) using Terraform
 
-## Getting Started
-
-To run this project - 
+## Running the Project
 
   1)Clone / Download the project.
   
 
 
-  2)Change the GCP project id in main.tf to the GCP project id.
+  2)Change the GCP project id in ```main.tf``` to the GCP project id.
 
   3)Add the ```credentials.json ``` file to the working directory. This the service account key used by Terraform to run.
 
