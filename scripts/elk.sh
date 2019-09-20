@@ -24,7 +24,7 @@ source /etc/profile
 sudo service elasticsearch start
 sudo service logstash start
 sudo service kibana start
-sudo cp /chandu/GCP/Terraform/abc.conf /etc/logstash/conf.d/abc.conf
+sudo cp /chandu/gcpterraform/scripts/abc.conf /etc/logstash/conf.d/abc.conf
 sudo sed -i 's/localhost/'$ip'/' /etc/logstash/conf.d/abc.conf
 sudo service elasticsearch restart
 sudo service logstash restart
