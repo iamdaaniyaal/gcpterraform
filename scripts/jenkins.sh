@@ -7,12 +7,11 @@ sudo yum install jenkins maven google-cloud-sdk kubectl -y
 sudo echo "jenkins  ALL=(ALL)   NOPASSWD:  ALL" >> /etc/sudoers
 sudo  wget -O  /opt/docker.sh  https://get.docker.com && sudo chmod 755 /opt/docker.sh 
 sudo sh  /opt/docker.sh   &&  sudo usermod -aG  docker jenkins
-sudo cat /Terraform_cicd/mydaemon.json  >> /etc/docker/daemon.json
-sudo  mv /usr/share/maven/conf/*  /mnt && sudo cat /Terraform_cicd/mvn_sonar_settings.xml > /usr/share/maven/conf/settings.xml
+sudo cat /gcpterraform/scripts/mydaemon.json  >> /etc/docker/daemon.json
+sudo  mv /usr/share/maven/conf/*  /mnt && sudo cat /gcpterraform/scripts/mvn_sonar_settings.xml > /usr/share/maven/conf/settings.xml
 sudo systemctl restart docker &&  sudo systemctl enable  docker
 sudo systemctl restart jenkins &&  sudo systemctl enable  jenkins
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword >> /root/jenkins_pass
 sudo wget -P /opt/  https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip
 sudo unzip /opt/sonar-scanner-cli-3.3.0.1492-linux.zip -d /opt  &&  sudo mv /opt/sonar-scanner-3.3.0.1492-linux  /opt/sonar-scanner
-sudo echo "sonar.host.url=http://35.238.100.99:9000" >> /opt/sonar-scanner/conf/sonar-scanner.properties
-sudo gcloud init
+sudo echo "sonar.host.url=http://35.243.190.46:9000" >> /opt/sonar-scanner/conf/sonar-scanner.properties
