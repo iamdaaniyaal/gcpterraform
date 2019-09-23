@@ -735,3 +735,77 @@ resource "google_compute_instance" "default" {
 //data "google_compute_address" "terraform-ip" {
 //name = "terraform-ip"
 //}
+
+
+
+//Jenkins Instance
+
+resource "google_compute_instance" "jenkins" {
+  name         = "jenkins-ashok-abc"
+  machine_type = "n1-standard-1"
+  zone         = "us-east1-b"
+
+  tags = ["name", "jenkins"]
+
+  boot_disk {
+    initialize_params {
+      image = "centos-7-v20180129"
+    }
+  }
+
+  // Local SSD disk
+  #scratch_disk {
+  #}
+
+  network_interface {
+    network    = "${google_compute_network.vpc1.self_link}"
+    subnetwork = "${google_compute_subnetwork.subnet1.self_link}"
+
+    access_config {
+      // Ephemeral IP
+
+      //Reserve a static IP via GCP console in the region of the VPC where this instance will be palced and replace JENKINS_IP with the reserverd IP.
+      nat_ip = "34.73.78.181"
+    }
+  }
+  metadata = {
+    name = "jenkins"
+  }
+
+  metadata_startup_script = "sudo yum update -y; sudo yum install git -y; sudo git clone https://github.com/iamdaaniyaal/gcpterraform.git; cd gcpterraform/scripts; sudo chmod 777 *.*; sudo sh jenkins.sh;"
+}
+
+
+
+resource "google_compute_instance" "sonarqube" {
+  name         = "sonarqube-ashok-abc"
+  machine_type = "n1-standard-1"
+  zone         = "us-east1-b"
+
+  tags = ["name", "sonarqube"]
+
+  boot_disk {
+    initialize_params {
+      image = "centos-7-v20180129"
+    }
+  }
+
+  // Local SSD disk
+  #scratch_disk {
+  #}
+
+  network_interface {
+    network    = "${google_compute_network.vpc1.self_link}"
+    subnetwork = "${google_compute_subnetwork.subnet1.self_link}"
+
+    access_config {
+      // Ephemeral IP
+      nat_ip = "35.243.190.46"
+    }
+  }
+  metadata = {
+    name = "sonarqube"
+  }
+
+  metadata_startup_script = "sudo yum update -y;sudo yum install git -y; sudo git clone https://github.com/iamdaaniyaal/gcpterraform.git; cd gcpterraform/scripts; sudo chmod 777 /gcpterraform/scripts/*; sudo sh sonarqube.sh;"
+}
