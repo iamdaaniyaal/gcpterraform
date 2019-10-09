@@ -1,4 +1,5 @@
-sudo export harborip=`curl -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip`
+sudo echo 'export harborip='$(curl -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip)'' >> ~/.bash_profile
+source ~/.bash_profile
 sudo systemctl  stop firewalld && sudo systemctl  stop firewalld
 sudo curl -fsSL https://get.docker.com -o docker.sh
 sudo chmod 777 *.sh
