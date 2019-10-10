@@ -844,3 +844,34 @@ resource "google_compute_instance" "lamp-stack" {
 
   tags = ["http-server"]
 }
+
+//MEAN Stack
+resource "google_compute_address" "meanip" {
+  name   = "meanip"
+  region = "us-east1"
+}
+
+resource "google_compute_instance" "mean-stack" {
+  name         = "mean-stack"
+  machine_type = "n1-standard-1"
+  zone         = "us-east1-b"
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-9"
+    }
+  }
+  network_interface {
+    network    = "${google_compute_network.vpc1.self_link}"
+    subnetwork = "${google_compute_subnetwork.subnet1.self_link}"
+
+    access_config {
+      // Ephemeral IP
+
+      nat_ip       = "${google_compute_address.meanip.address}"
+      network_tier = "PREMIUM"
+    }
+  }
+  metadata_startup_script = "sudo apt-get update; sudo apt-get install git  -y; git clone https://github.com/iamdaaniyaal/gcpterraform.git; cd gcpterraform/scripts; sudo chmod 777 mean.sh; sh mean.sh"
+
+  tags = ["http-server"]
+}
