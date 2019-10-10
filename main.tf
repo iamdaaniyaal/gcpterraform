@@ -771,13 +771,13 @@ resource "google_compute_instance" "jenkins" {
   #}
 
 
-  network_interface {
-    # network = "default"
+ network_interface {
+    network    = "${google_compute_network.vpc1.self_link}"
+    subnetwork = "${google_compute_subnetwork.subnet1.self_link}"
 
-    network = "default"
-    # subnetwork = "${google_compute_subnetwork.subnet1.self_link}"
     access_config {
       // Ephemeral IP
+
       nat_ip       = "${google_compute_address.jenkinsip.address}"
       network_tier = "PREMIUM"
     }
