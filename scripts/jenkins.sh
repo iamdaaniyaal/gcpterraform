@@ -11,8 +11,8 @@ sudo yum install jenkins maven google-cloud-sdk kubectl -y
 sudo echo "jenkins  ALL=(ALL)   NOPASSWD:  ALL" >> /etc/sudoers
 sudo  wget -O  /opt/docker.sh  https://get.docker.com && sudo chmod 755 /opt/docker.sh 
 sudo sh  /opt/docker.sh   &&  sudo usermod -aG  docker jenkins
-sudo cat /tmp/mydaemon.json  >> /etc/docker/daemon.json
-sudo  mv /usr/share/maven/conf/*  /mnt && sudo cat /tmp/mvn_sonar_settings.xml > /usr/share/maven/conf/settings.xml
+sudo cat /gcpterraform/mydaemon.json  >> /etc/docker/daemon.json
+sudo  mv /usr/share/maven/conf/*  /mnt && sudo cat /gcpterraform/mvn_sonar_settings.xml > /usr/share/maven/conf/settings.xml
 sudo systemctl restart docker &&  sudo systemctl enable  docker
 sudo systemctl restart jenkins &&  sudo systemctl enable  jenkins
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword >> /root/jenkins_pass
