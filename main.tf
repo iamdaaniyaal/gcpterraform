@@ -740,12 +740,25 @@ resource "google_compute_instance" "default" {
 
 //Jenkins Instance
 
+resource "google_compute_address" "jenkinsip" {
+  name   = "jenkinsip"
+  region = "us-east1"
+}
+
+data "template_file" "mydeamon" {
+  # template = "${file("conf.wp-config.php")}"
+
+  template = templatefile("${path.module}/mydeamon.json", { jenkinsip = "${google_compute_address.jenkinsip.address}" })
+
+}
+
 resource "google_compute_instance" "jenkins" {
   name         = "jenkins-ashok-abc"
   machine_type = "n1-standard-1"
   zone         = "us-east1-b"
 
-  tags = ["name", "jenkins"]
+  tags        = ["name", "jenkins", "http-server"]
+  description = "${google_compute_address.sonarqubeip.address}"
 
   boot_disk {
     initialize_params {
@@ -757,24 +770,97 @@ resource "google_compute_instance" "jenkins" {
   #scratch_disk {
   #}
 
-  network_interface {
-    network    = "${google_compute_network.vpc1.self_link}"
-    subnetwork = "${google_compute_subnetwork.subnet1.self_link}"
 
+  network_interface {
+    # network = "default"
+
+    network = "default"
+    # subnetwork = "${google_compute_subnetwork.subnet1.self_link}"
     access_config {
       // Ephemeral IP
-
-      //Reserve a static IP via GCP console in the region of the VPC where this instance will be palced and replace JENKINS_IP with the reserverd IP.
-      nat_ip = "34.73.78.181"
+      nat_ip       = "${google_compute_address.jenkinsip.address}"
+      network_tier = "PREMIUM"
     }
   }
+
+
+
+
+  # provisioner "file" {
+  #   content     = "${data.template_file.jenkins.rendered}"
+  #   destination = "/tmp/jenkins.sh"
+
+  #   connection {
+  #     type     = "ssh"
+  #     user     = "root"
+  #     password = "root123"
+  #     # host     = "${google_compute_instance.default.network_interface[0].access_config[0].nat_ip}"
+  #     host = "${google_compute_address.jenkinsip.address}"
+  #   }
+  # }
+
+
+  provisioner "file" {
+    content     = "${data.template_file.mydeamon.rendered}"
+    destination = "/tmp/mydeamon.json"
+
+    connection {
+      type     = "ssh"
+      user     = "root"
+      password = "root123"
+      # host     = "${google_compute_instance.default.network_interface[0].access_config[0].nat_ip}"
+      host = "${google_compute_address.jenkinsip.address}"
+    }
+  }
+
+
+  # provisioner "file" {
+  #   content     = "${data.template_file.mvn_sonar_settings.rendered}"
+  #   destination = "/tmp/mvn_sonar_settings.xml"
+
+  #   connection {
+  #     type     = "ssh"
+  #     user     = "root"
+  #     password = "root123"
+  #     # host     = "${google_compute_instance.default.network_interface[0].access_config[0].nat_ip}"
+  #     host = "${google_compute_address.jenkinsip.address}"
+  #   }
+  # }
+
+
+  # provisioner "remote-exec" {
+  #   inline = [
+  #     # "sudo su - test",
+  #     # "sudo -s",
+  #     "sudo chmod 777 /tmp/jenkins.sh",
+  #     "sudo sh /tmp/jenkins.sh",
+  #   ]
+
+
+  #   connection {
+  #     type     = "ssh"
+  #     user     = "root"
+  #     password = "root123"
+  #     # host     = "${google_compute_instance.default.network_interface[0].access_config[0].nat_ip}"
+  #     host = "${google_compute_address.jenkinsip.address}"
+  #   }
+  # }
   metadata = {
     name = "jenkins"
   }
 
-  metadata_startup_script = "sudo yum update -y; sudo yum install git -y; sudo git clone https://github.com/iamdaaniyaal/gcpterraform.git; cd gcpterraform/scripts; sudo chmod 777 *.*; sudo sh jenkins.sh;"
+
+  # metadata_startup_script = "sudo yum update -y; sudo yum install wget -y; sudo  echo \"root123\" | passwd --stdin root; sudo  mv /etc/ssh/sshd_config  /opt; sudo touch /etc/ssh/sshd_config; sudo echo -e \"Port 22\nHostKey /etc/ssh/ssh_host_rsa_key\nPermitRootLogin yes\nPubkeyAuthentication yes\nPasswordAuthentication yes\nUsePAM yes\" >  /etc/ssh/sshd_config; sudo systemctl restart  sshd;sudo useradd test; sudo echo  -e \"test    ALL=(ALL)  NOPASSWD:  ALL\" >> /etc/sudoers; sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo; sudo rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key; sudo yum install jenkins maven google-cloud-sdk kubectl -y; sudo  wget -O  /opt/docker.sh  https://get.docker.com && sudo chmod 755 /opt/docker.sh; sudo wget -P /opt/  https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip; sudo unzip /opt/sonar-scanner-cli-3.3.0.1492-linux.zip -d /opt  &&  sudo mv /opt/sonar-scanner-3.3.0.1492-linux  /opt/sonar-scanner"
+  metadata_startup_script = "sudo yum update -y; sudo yum install wget -y; sudo  echo \"root123\" | passwd --stdin root; sudo  mv /etc/ssh/sshd_config  /opt; sudo touch /etc/ssh/sshd_config; sudo echo -e \"Port 22\nHostKey /etc/ssh/ssh_host_rsa_key\nPermitRootLogin yes\nPubkeyAuthentication yes\nPasswordAuthentication yes\nUsePAM yes\" >  /etc/ssh/sshd_config; sudo systemctl restart  sshd;sudo useradd test; sudo echo  -e \"test    ALL=(ALL)  NOPASSWD:  ALL\" >> /etc/sudoers; sudo yum install git -y; sudo git clone https://github.com/iamdaaniyaal/gcpterraform.git; cd gcpterraform/scripts; sudo chmod 777 *.*; sudo sh jenkins.sh;"
+  # metadata_startup_script = "sudo yum update -y; sudo yum install git -y; sudo git clone https://github.com/iamdaaniyaal/gcpterraform.git; cd gcpterraform/scripts; sudo chmod 777 *.*; sudo sh jenkins.sh;"
 }
 
+
+//SonarQube Instance
+resource "google_compute_address" "sonarqubeip" {
+  name   = "sonarqubeip"
+  region = "us-east1"
+}
 
 
 resource "google_compute_instance" "sonarqube" {
