@@ -17,6 +17,8 @@ cat > /etc/docker/daemon.json << EOF
 {
         "insecure-registries" : ["$jenkinsip"]
 }
+
+EOF
 sudo sed -i 's/$jenkinsip/'$jenkinsip'/' /etc/docker/daemon.json
 sudo  mv /usr/share/maven/conf/*  /mnt && sudo cp /gcpterraform/scripts/mvn_sonar_settings.xml /usr/share/maven/conf/settings.xml
 sudo sed -i 's/$sonarqubeip/'$sonarqubeip'/' /usr/share/maven/conf/settings.xml 
