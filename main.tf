@@ -875,3 +875,35 @@ resource "google_compute_instance" "mean-stack" {
 
   tags = ["http-server"]
 }
+
+//MERN Stack
+resource "google_compute_address" "mernip" {
+  name   = "mernip"
+  region = "us-east1"
+}
+
+resource "google_compute_instance" "mern-stack" {
+  name         = "mern-stack"
+  machine_type = "n1-standard-1"
+  zone         = "us-east1-b"
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-9"
+    }
+  }
+  network_interface {
+    network    = "${google_compute_network.vpc1.self_link}"
+    subnetwork = "${google_compute_subnetwork.subnet1.self_link}"
+
+    access_config {
+      // Ephemeral IP
+
+      nat_ip       = "${google_compute_address.mernip.address}"
+      network_tier = "PREMIUM"
+    }
+  }
+  metadata_startup_script = "sudo apt-get update; sudo apt-get install git  -y; git clone https://github.com/iamdaaniyaal/gcpterraform.git; cd gcpterraform/scripts; sudo chmod 777 mern.sh; sh mern.sh"
+
+  tags = ["http-server"]
+}
+
