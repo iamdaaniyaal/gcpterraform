@@ -13,7 +13,7 @@ sudo  wget -O  /opt/docker.sh  https://get.docker.com && sudo chmod 755 /opt/doc
 sudo sh  /opt/docker.sh   &&  sudo usermod -aG  docker jenkins
 sudo cp /gcpterraform/scrpits/mydaemon.json /etc/docker/daemon.json
 sudo sed -i 's/$jenkinsip/'$jenkinsip'/' /etc/docker/daemon.json
-sudo  mv /usr/share/maven/conf/*  /mnt && sudo cp /gcpterraform/mvn_sonar_settings.xml /usr/share/maven/conf/settings.xml
+sudo  mv /usr/share/maven/conf/*  /mnt && sudo cp /gcpterraform/scripts/mvn_sonar_settings.xml /usr/share/maven/conf/settings.xml
 sudo sed -i 's/$sonarqube/'$sonarqubeip'/' /usr/share/maven/conf/settings.xml 
 sudo systemctl restart docker &&  sudo systemctl enable  docker
 sudo systemctl restart jenkins &&  sudo systemctl enable  jenkins
