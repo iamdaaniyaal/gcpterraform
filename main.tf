@@ -698,24 +698,33 @@ resource "google_compute_instance" "elk" {
 }
 
 
+
+//Harbor Instance (Ashoks Harbor)
 resource "google_compute_address" "harborip" {
   name   = "harborip"
   region = "us-east1"
 }
-resource "google_compute_instance" "default" {
-  name         = "${var.harbor_instance_name}"
+
+
+
+resource "google_compute_instance" "harbor" {
+  name         = "harbor-ashok"
   machine_type = "n1-standard-1"
   zone         = "us-east1-b"
-  tags         = ["foo", "bar"]
+
+
+  tags = ["name", "harbor", "http-server"]
+
   boot_disk {
     initialize_params {
-      image = "centos-7-v20190905"
+      image = "centos-7-v20180129"
     }
   }
   // Local SSD disk
-  scratch_disk {
-  }
-  network_interface {
+  #scratch_disk {
+  #}
+
+ network_interface {
     # network = "default"
 
     network    = "${google_compute_network.vpc1.self_link}"
@@ -727,14 +736,58 @@ resource "google_compute_instance" "default" {
     }
   }
 
+
+
   metadata = {
-    foo = "bar"
+    name = "harbor"
   }
-  metadata_startup_script = " sudo yum install git -y; sudo yum install wget -y; cd /; cd ~; mkdir projectdir; cd projectdir; sudo systemctl stop firewalld; sudo systemctl disable firewalld; sudo git clone https://github.com/iamdaaniyaal/gcpterraform.git ; cd gcpterraform/scripts; sudo chmod 777 harbor.sh; sudo  ./harbor.sh; "
+  description             = "${google_compute_address.harborip.address}"
+  metadata_startup_script = "sudo yum update -y; sudo yum install git -y; sudo yum install wget -y; git clone https://github.com/iamdaaniyaal/gcpterraform.git; cd gcpterraform/scripts; sudo chmod 777 hb.sh; sh hb.sh"
+
+
+  service_account {
+    scopes = ["cloud-platform"]
+  }
+  # metadata_startup_script = "sudo yum update; sudo yum install wget -y; sudo  echo \"root123\" | passwd --stdin root; sudo  mv /etc/ssh/sshd_config  /opt; sudo touch /etc/ssh/sshd_config; sudo echo -e \"Port 22\nHostKey /etc/ssh/ssh_host_rsa_key\nPermitRootLogin yes\nPubkeyAuthentication yes\nPasswordAuthentication yes\nUsePAM yes\" >  /etc/ssh/sshd_config; sudo systemctl restart  sshd;sudo useradd test; sudo echo  -e \"test    ALL=(ALL)  NOPASSWD:  ALL\" >> /etc/sudoers;"
 }
-//data "google_compute_address" "terraform-ip" {
-//name = "terraform-ip"
-//}
+
+
+
+//Shriyuts Harbor Instance
+resource "google_compute_address" "harborip" {
+#   name   = "harborip"
+#   region = "us-east1"
+# }
+# resource "google_compute_instance" "default" {
+#   name         = "${var.harbor_instance_name}"
+#   machine_type = "n1-standard-1"
+#   zone         = "us-east1-b"
+#   tags         = ["foo", "bar"]
+#   boot_disk {
+#     initialize_params {
+#       image = "centos-7-v20190905"
+#     }
+#   }
+#   // Local SSD disk
+#   scratch_disk {
+#   }
+#   network_interface {
+#     # network = "default"
+
+#     network    = "${google_compute_network.vpc1.self_link}"
+#     subnetwork = "${google_compute_subnetwork.subnet1.self_link}"
+#     access_config {
+#       // Ephemeral IP
+#       nat_ip       = "${google_compute_address.harborip.address}"
+#       network_tier = "PREMIUM"
+#     }
+#   }
+
+#   metadata = {
+#     foo = "bar"
+#   }
+#   metadata_startup_script = " sudo yum install git -y; sudo yum install wget -y; cd /; cd ~; mkdir projectdir; cd projectdir; sudo systemctl stop firewalld; sudo systemctl disable firewalld; sudo git clone https://github.com/iamdaaniyaal/gcpterraform.git ; cd gcpterraform/scripts; sudo chmod 777 harbor.sh; sudo  ./harbor.sh; "
+# }
 
 
 
