@@ -14,4 +14,4 @@ sudo systemctl restart jenkins &&  sudo systemctl enable  jenkins
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword >> /root/jenkins_pass
 sudo wget -P /opt/  https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip
 sudo unzip /opt/sonar-scanner-cli-3.3.0.1492-linux.zip -d /opt  &&  sudo mv /opt/sonar-scanner-3.3.0.1492-linux  /opt/sonar-scanner
-sudo echo "sonar.host.url=http://35.243.190.46:9000" >> /opt/sonar-scanner/conf/sonar-scanner.properties
+sudo echo "sonar.host.url=http://$sonarqubeip:9000" >> /opt/sonar-scanner/conf/sonar-scanner.properties
