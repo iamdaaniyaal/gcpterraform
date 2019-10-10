@@ -14,7 +14,7 @@ sudo sh  /opt/docker.sh   &&  sudo usermod -aG  docker jenkins
 # sudo cp /gcpterraform/scripts/mydaemon.json /etc/docker/daemon.json
 # sudo sed -i 's/$jenkinsip/'$jenkinsip'/' /etc/docker/daemon.json
 sudo su
-cat > /etc/docker/daemon.json << EOF
+sudo cat > /etc/docker/daemon.json << EOF
 {
         "insecure-registries" : ["$jenkinsip"]
 }
