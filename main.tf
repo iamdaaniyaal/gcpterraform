@@ -921,7 +921,7 @@ resource "google_compute_instance" "sonarqube" {
   machine_type = "n1-standard-1"
   zone         = "us-east1-b"
 
-  tags = ["name", "sonarqube"]
+  tags = ["name", "sonarqube", "http-server"]
 
   boot_disk {
     initialize_params {
@@ -937,9 +937,10 @@ resource "google_compute_instance" "sonarqube" {
     network    = "${google_compute_network.vpc1.self_link}"
     subnetwork = "${google_compute_subnetwork.subnet1.self_link}"
 
+
     access_config {
       // Ephemeral IP
-      nat_ip = "35.243.190.46"
+      nat_ip = "${google_compute_address.sonarqubeip.address}"
     }
   }
   metadata = {
