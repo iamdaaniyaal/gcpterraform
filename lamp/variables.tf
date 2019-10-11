@@ -1,6 +1,7 @@
 variable "credentials" {}
-variable "region" {}
 variable "gcp_project" {}
+variable "region" {}
+variable "lamp_stack_instance_ip_region" {}
 variable "lamp_stack_instance_name" {}
 variable "lamp_stack_machine_type" {}
 variable "lamp_stack_zone" {}
