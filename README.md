@@ -14,6 +14,11 @@ Description of the various files in the repository -
 
 ```scripts``` - This folder contains all the **configuration files** and **startup scripts** used by various stacks.
 
+```lamp``` - This folder contains all the **terraform** for **LAMP Stack** including **lamp startup script** ```lamp.sh```.
+
+```mean``` - This folder contains all the **terraform** for **MEAN Stack** including **mean startup script** ```mean.sh```.
+
+```mern``` - This folder contains all the **terraform** for **MERN Stack** including **mern startup script** ```mern.sh```.
 
 
 ## Running the Project
