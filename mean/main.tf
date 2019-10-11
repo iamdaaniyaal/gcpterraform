@@ -15,7 +15,7 @@ resource "google_compute_address" "meanip" {
 }
 
   
-// LAMP Stack Instance
+// MEAN Stack Instance
 resource "google_compute_instance" "mean-stack" {
   name         = "${var.mean_stack_instance_name}"
   machine_type = "${var.mean_stack_machine_type}"
