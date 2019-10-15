@@ -10,17 +10,17 @@ sudo rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
 sudo yum install jenkins maven google-cloud-sdk kubectl -y
 sudo echo "jenkins  ALL=(ALL)   NOPASSWD:  ALL" >> /etc/sudoers
 sudo  wget -O  /opt/docker.sh  https://get.docker.com && sudo chmod 755 /opt/docker.sh 
-sudo sh  /opt/docker.sh   &&  sudo usermod -aG  docker jenkins
-# sudo cp /gcpterraform/scripts/mydaemon.json /etc/docker/daemon.json
-# sudo sed -i 's/$jenkinsip/'$jenkinsip'/' /etc/docker/daemon.json
-sudo su
+sudo sh  /opt/docker.sh   &&  sudo usermod -aG  docker jenkins && sudo systemctl start docker
+sudo systemctl stop  docker
+sudo  touch /etc/docker/daemon.json
 sudo cat > /etc/docker/daemon.json << EOF
 {
-        "insecure-registries" : ["$jenkinsip"]
+        "insecure-registries" : ["$harbourip"]
 }
-
 EOF
-sudo sed -i 's/$jenkinsip/'$jenkinsip'/' /etc/docker/daemon.json
+# sudo cp /gcpterraform/scripts/mydaemon.json /etc/docker/daemon.json
+# sudo sed -i 's/$jenkinsip/'$jenkinsip'/' /etc/docker/daemon.json
+# sudo sed -i 's/$jenkinsip/'$jenkinsip'/' /etc/docker/daemon.json
 sudo  mv /usr/share/maven/conf/*  /mnt && sudo cp /gcpterraform/scripts/mvn_sonar_settings.xml /usr/share/maven/conf/settings.xml
 sudo sed -i 's/$sonarqubeip/'$sonarqubeip'/' /usr/share/maven/conf/settings.xml 
 sudo systemctl restart docker &&  sudo systemctl enable  docker
