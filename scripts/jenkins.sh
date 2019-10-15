@@ -1,7 +1,11 @@
 sudo yum update -y
 sudo systemctl stop firewalld && sudo systemctl disable firewalld
 sudo echo 'export jenkinsip=`curl -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip`' >> ~/.bash_profile
-sudo echo 'export sonarqubeip=`curl -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/description`' >> ~/.bash_profile
+sudo echo 'export ipdata=`curl -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/description`' >> ~/.bash_profile
+source ~/.bash_profile
+# sudo cut -d + -f 1 <<< $ipdata
+export sonarqubeip=$(cut -d + -f 1  <<< $ipdata)
+export harborip=$(cut -d + -f 2  <<< $ipdata)
 source ~/.bash_profile
 sudo yum install epel-release -y 
 sudo yum install java-1.8.0-openjdk  java-1.8.0-openjdk-devel  wget  unzip -y 
@@ -15,7 +19,7 @@ sudo systemctl stop  docker
 sudo  touch /etc/docker/daemon.json
 sudo cat > /etc/docker/daemon.json << EOF
 {
-        "insecure-registries" : ["$harbourip"]
+        "insecure-registries" : ["$harborip"]
 }
 EOF
 # sudo cp /gcpterraform/scripts/mydaemon.json /etc/docker/daemon.json
