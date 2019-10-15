@@ -29,5 +29,5 @@ sudo cp /var/lib/jenkins/secrets/initialAdminPassword /root/jenkins_pass
 sudo wget -P /opt/  https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip
 sudo unzip /opt/sonar-scanner-cli-3.3.0.1492-linux.zip -d /opt  &&  sudo mv /opt/sonar-scanner-3.3.0.1492-linux  /opt/sonar-scanner
 sudo echo "sonar.host.url=http://${sonarqubeip}" >> /opt/sonar-scanner/conf/sonar-scanner.properties
-sudo cp /tmp/mydeamon.json /etc/docker/daemon.json
-sudo chmod 777 /etc/docker/daemon.json
+# sudo cp /tmp/mydeamon.json /etc/docker/daemon.json
+# sudo chmod 777 /etc/docker/daemon.json
